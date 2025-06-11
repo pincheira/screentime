@@ -34,6 +34,11 @@ osacompile -o ScreenTime.app screentime.applescript
 
 Go to `System Preferences > Users & Groups > Login Items`, then press `+` and add `ScreenTime.app`.
 
+## Full Disk Access
+Full Disk Access wasn’t always required to read the Screen Time (and related) databases on macOS. However, starting with macOS Catalina (10.15), Apple restricted access to these files. If you don’t grant Full Disk Access to both Applet (automatically listed when the app runs) and ScreenTime.app, you’ll encounter the “authorization denied (code: 23)” error. To avoid this, go to System Settings → Privacy & Security → Full Disk Access, and make sure both are enabled.
+
+![docs/screenshot.png](docs/fulldisk.png)
+
 ## References
 
 - https://www.swiftbysundell.com/articles/building-a-command-line-tool-using-the-swift-package-manager/
