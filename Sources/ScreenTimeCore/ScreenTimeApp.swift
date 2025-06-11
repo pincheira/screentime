@@ -22,6 +22,7 @@ class ScreenTimeApp : NSObject, NSApplicationDelegate {
 
     override init() {
         super.init()
+
         app.setActivationPolicy(.accessory) // No dock, no menubar
 
         // set knowledge database path
@@ -44,7 +45,12 @@ class ScreenTimeApp : NSObject, NSApplicationDelegate {
         app.mainMenu = NSMenu()
         app.mainMenu?.addItem(sub)
 
-        // setup and start timer
+       
+        print("ScreenTimeApp initialized.")
+    }
+
+    func start() {
+         // setup and start timer
         timer = Timer.scheduledTimer(
             timeInterval: (60.0 * 2.5), // seconds
             target: self,
@@ -53,21 +59,21 @@ class ScreenTimeApp : NSObject, NSApplicationDelegate {
             repeats: true
         )
         timer.fire()
-        print("ScreenTimeApp initialized.")
     }
 
     internal func applicationDidFinishLaunching(_ n: Notification) {
         print("ScreenTimeApp launched.")
+        start()
     }
 
     @objc
-    private func timerAction() throws {
+    private func timerAction() {
         do {
             let uptime = formatTime(s: try queryScreenTime())
             print("Uptime => \(uptime)")
             statusItem.button?.title = "\(uptime)"
         } catch {
-            throw error
+            print("⚠️ Failed to query screen time: \(error)")
         }
     }
 
@@ -112,7 +118,19 @@ class ScreenTimeApp : NSObject, NSApplicationDelegate {
     }
 
     private func formatTime(s: String) -> String {
+        // Split the time string (e.g. "04:07") into hours and minutes
         let t = s.split(separator: ":")
-        return "\(t[0])h \(t[1])m"
+
+        // Convert each component to Int to remove any leading zeros
+        let h = Int(t[0]) ?? 0
+        let m = Int(t[1]) ?? 0
+
+        // If hours are zero, return only minutes (e.g. "42m")
+        if h == 0 {
+            return "\(m)m"
+        } else {
+            // Otherwise, return both hours and minutes (e.g. "1h 5m")
+            return "\(h)h \(m)m"
+        }
     }
 }
