@@ -65,7 +65,7 @@ class ScreenTimeApp: NSObject, NSApplicationDelegate {
             let totalSeconds = try queryScreenTime()
             let uptime = formatTime(seconds: totalSeconds)
             print("🕓 Uptime => \(uptime)")
-            statusItem.button?.title = uptime
+            statusItem.button?.title = "💪🏼 \(uptime)"
         } catch {
             print("⚠️ Failed to query screen time: \(error.localizedDescription)")
             statusItem.button?.title = "--"
